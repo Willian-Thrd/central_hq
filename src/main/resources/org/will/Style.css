@@ -1,0 +1,12 @@
+#title-label {
+    -fx-font-size: 25px;
+    -fx-family: "Arial";
+}
+
+#cadastrar-button, #excluir-button {
+    -fx-background-color: darkgrey;
+    -fx-border-color: black;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: black;
+}
