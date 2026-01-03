@@ -10,3 +10,7 @@
     -fx-background-radius: 5px;
     -fx-text-fill: black;
 }
+
+#pane {
+    -fx-background-color: dimgray;
+}

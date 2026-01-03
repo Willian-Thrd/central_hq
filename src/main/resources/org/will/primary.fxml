@@ -15,21 +15,39 @@
          <children>
             <BorderPane prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <center>
-                  <AnchorPane prefHeight="1440.0" prefWidth="2160.0" BorderPane.alignment="CENTER">
+                  <AnchorPane id="pane" prefHeight="1440.0" prefWidth="2160.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ScrollPane layoutX="880.0" prefHeight="620.0" prefWidth="380.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                        <Label id="title-label" layoutX="400.0" layoutY="10.0" text="Central HQ" />
+                        <Button id="cadastrar-button" layoutX="10.0" layoutY="10.0" onAction="#cadastrar" text="Cadastrar" />
+                        <Button id="excluir-button" layoutX="98.0" layoutY="10.0" onAction="#excluir" text="Excluir" />
+                        <Separator layoutY="99.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+                        <ScrollPane layoutX="710.0" layoutY="100.0" prefHeight="620.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="720.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
                            <content>
-                              <AnchorPane prefHeight="620.0" prefWidth="380.0">
+                              <AnchorPane prefHeight="620.0" prefWidth="340.0">
                                  <children>
-                                    <ListView fx:id="lista" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ListView fx:id="lista" prefHeight="620.0" prefWidth="330.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </content></ScrollPane>
-                        <Label id="title-label" layoutX="400.0" layoutY="10.0" text="Central HQ" />
-                        <Button id="cadastrar-button" layoutX="10.0" layoutY="10.0" text="Cadastrar" />
-                        <Button id="excluir-button" layoutX="100.0" layoutY="10.0" text="Excluir" />
-                        <Separator layoutY="99.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
-                        <Separator layoutX="350.0" layoutY="100.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="100.0" />
+                        <ScrollPane layoutX="340.0" layoutY="100.0" prefHeight="620.0" prefWidth="359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="370.0" AnchorPane.topAnchor="100.0">
+                           <content>
+                              <AnchorPane prefHeight="620.0" prefWidth="359.0">
+                                 <children>
+                                    <ListView fx:id="sub" prefHeight="620.0" prefWidth="330.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutY="100.0" prefHeight="620.0" prefWidth="340.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="740.0">
+                           <content>
+                              <AnchorPane prefHeight="620.0" prefWidth="340.0">
+                                 <children>
+                                    <ListView fx:id="pastas" layoutX="-15.0" layoutY="-7.0" prefHeight="620.0" prefWidth="330.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                        <Button id="excluir-button" layoutX="170.0" layoutY="10.0" onAction="#visto" text="Visto" />
                      </children>
                   </AnchorPane>
                </center>
