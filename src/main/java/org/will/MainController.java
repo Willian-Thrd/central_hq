@@ -1,20 +1,23 @@
 package org.will;
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 
 public class MainController {
-    private static <T> void print(T txt) {
-        System.out.println(txt);
+    @FXML
+    private ListView<File> lista;
+
+    @FXML
+    private void initialize() throws IOException {
+        System.out.println("Iniciando...");
     }
 
     @FXML
-    private void initializa() {
-    
-    }
-
-    @FXML
-    private void cadastrar(ActionEvent event) {
+    private void cadastrar(ActionEvent event) throws IOException {
         System.out.println("Cadastrando...");
     }
 
@@ -22,4 +25,8 @@ public class MainController {
     private void excluir(ActionEvent event) {
         System.out.println("Excluindo...");
     }
+
+    // Elementos não FXML
+
+    
 }
