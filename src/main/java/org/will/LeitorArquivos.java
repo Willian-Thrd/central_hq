@@ -6,13 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class LeitorArquivos {
-    ObservableList<File> content = FXCollections.observableArrayList();
+    private ObservableList<File> content = FXCollections.observableArrayList();
 
     public LeitorArquivos(File dir) {
         arquivos(dir);
     }
 
-    public void arquivos(File archives) {
+    private void arquivos(File archives) {
         File[] listFiles = archives.listFiles();
         if (listFiles == null) return;
 

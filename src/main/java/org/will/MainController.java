@@ -28,7 +28,12 @@ public class MainController {
 
     @FXML
     private void initialize() throws IOException {
+        for (File f : Load.load()) {
+            selected.add(normalizar(f));
+        }
+
         System.out.println("Iniciando...");
+        atualizarLista();
 
         // Adiciona todos os itens (Pastas, subpastas e arquivos) ao iniciar o programa
         Leitor leitor = new Leitor();
@@ -45,6 +50,7 @@ public class MainController {
             if (newVal != null) {
                 LeitorArquivos leitorArquivos = new LeitorArquivos(newVal);
                 lista.setItems(leitorArquivos.getContent());
+                lista.refresh();
             }
         });
 
@@ -81,27 +87,6 @@ public class MainController {
             }
         });
 
-        // Adicionar imagens aos arquivos
-        lista.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(File item, boolean empty) {
-                super.updateItem(item, empty); 
-
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    String archiveName = item.getName();
-                    int ponto = archiveName.lastIndexOf('.');
-
-                    if (ponto > 0) {
-                        archiveName = archiveName.substring(0, ponto);
-                    }
-
-                    setText("📄 " + archiveName);
-                }
-            }
-        });
-
         // Adicionar imagens às pastas
         sub.setCellFactory(lv -> new ListCell<>() {
             @Override
@@ -113,7 +98,6 @@ public class MainController {
             } else {
                 setText("📁 " + item.getName());
             }
-
             }
         });
     }
@@ -143,36 +127,19 @@ public class MainController {
     @FXML
     private void visto() {
         File selecionado = lista.getSelectionModel().getSelectedItem();
+        if (selecionado == null) return;
 
-        if (selecionado != null && !selected.contains(selecionado)) {
-            selected.add(selecionado);  
+        File normalizado = normalizar(selecionado);
+
+        if (selected.add(normalizado)) {
             lista.refresh();
-        }
-
-        lista.setCellFactory(lv -> new ListCell<>() {
-        @Override
-        protected void updateItem(File item, boolean empty) {
-            super.updateItem(item, empty);
-
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                 String archiveName = item.getName();
-                int ponto = archiveName.lastIndexOf('.');
-
-                if (ponto > 0) {
-                    archiveName = archiveName.substring(0, ponto);
-                }
-
-                String icon = item.isDirectory() ? "📁 " : "📄 ";
-                String confere = selected.contains(item) ? " ✅" : "";
-
-                setText(icon + archiveName + confere);
+            try {
+                Save.salvar(selected);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-    });
     }
-
 
 
     // classes a parte --------------------------
@@ -211,6 +178,7 @@ public class MainController {
         }
     }
 
+    //Deleta arquivos e pastas
     private void delete(File file) {
         if (file.isDirectory()) {
             File[] filhos = file.listFiles();
@@ -221,5 +189,40 @@ public class MainController {
             }
         }
         file.delete();
+    }
+
+    private File normalizar(File f) {
+        try {
+            return f.getCanonicalFile();
+        } catch (IOException e) {
+            return f.getAbsoluteFile();
+        }
+    }
+
+    private void atualizarLista() {
+        lista.setCellFactory(lv -> new ListCell<>() {
+        @Override
+        protected void updateItem(File item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty || item == null) {
+                setText(null);
+                return;
+            }
+
+                String archiveName = item.getName();
+                int ponto = archiveName.lastIndexOf('.');
+
+                if (ponto > 0) {
+                    archiveName = archiveName.substring(0, ponto);
+                }
+
+                String icon = item.isDirectory() ? "📁 " : "📄 ";
+                String confere = selected.contains(normalizar(item)) ? " ✅" : "";
+
+                setText(icon + archiveName + confere);
+            
+        }
+    });
     }
 }
