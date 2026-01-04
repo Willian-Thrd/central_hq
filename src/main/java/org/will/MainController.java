@@ -24,7 +24,7 @@ public class MainController {
     private Set<File> selected = new HashSet<>();
 
     // Diretório onde estará os HQ's
-    File dir = new File(System.getProperty("user.dir"), HQ_Files);
+    File dir = new File(System.getProperty("user.dir"), "HQ_Files");
 
     @FXML
     private void initialize() throws IOException {
