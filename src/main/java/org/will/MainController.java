@@ -31,10 +31,15 @@ public class MainController {
         System.out.println("Iniciando...");
 
         // Adiciona todos os itens (Pastas, subpastas e arquivos) ao iniciar o programa
-        pastas.setItems(FXCollections.observableArrayList(dir));
+        Leitor leitor = new Leitor();
+        pastas.setItems(leitor.getContent());
 
-        LeitorSubpastas subpastas = new LeitorSubpastas();
-        sub.setItems(subpastas.getContent());
+        pastas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                LeitorSubpastas subpastas = new LeitorSubpastas(newVal, 0);
+                sub.setItems(subpastas.getContent());
+            }
+        });
 
         sub.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
@@ -57,10 +62,10 @@ public class MainController {
         // Evento de deletar pastas
         sub.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
-                File archiveSelected = sub.getSelectionModel().getSelectedItem();
+                File fileSelected = sub.getSelectionModel().getSelectedItem();
 
-                if (archiveSelected != null) {
-                    excluir(archiveSelected);
+                if (fileSelected != null) {
+                    excluir(fileSelected);
                 }
             }
         });
@@ -80,14 +85,20 @@ public class MainController {
         lista.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(File item, boolean empty) {
-            super.updateItem(item, empty); 
+                super.updateItem(item, empty); 
 
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                setText("📄 " + item.getName());
-            }
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    String archiveName = item.getName();
+                    int ponto = archiveName.lastIndexOf('.');
 
+                    if (ponto > 0) {
+                        archiveName = archiveName.substring(0, ponto);
+                    }
+
+                    setText("📄 " + archiveName);
+                }
             }
         });
 
@@ -115,9 +126,10 @@ public class MainController {
     private void cadastrar(ActionEvent event) throws IOException {
         System.out.println("Cadastrando...");
 
-        pastas.setItems(FXCollections.observableArrayList(dir));
+        Leitor leitor = new Leitor();
+        pastas.setItems(FXCollections.observableArrayList(leitor.getContent()));
 
-        LeitorSubpastas subpastas = new LeitorSubpastas();
+        LeitorSubpastas subpastas = new LeitorSubpastas(dir, 0);
         sub.setItems(subpastas.getContent());
     }
 
@@ -132,11 +144,10 @@ public class MainController {
     private void visto() {
         File selecionado = lista.getSelectionModel().getSelectedItem();
 
-        if (selecionado != null) {
+        if (selecionado != null && !selected.contains(selecionado)) {
             selected.add(selecionado);  
             lista.refresh();
         }
-    }
 
         lista.setCellFactory(lv -> new ListCell<>() {
         @Override
@@ -146,13 +157,22 @@ public class MainController {
             if (empty || item == null) {
                 setText(null);
             } else {
-                String icon = item.isDirectory() ? "📁 " : "📄 ";
-                String confere =  "✅";
+                 String archiveName = item.getName();
+                int ponto = archiveName.lastIndexOf('.');
 
-                setText(icon + item.getName() + confere);
+                if (ponto > 0) {
+                    archiveName = archiveName.substring(0, ponto);
+                }
+
+                String icon = item.isDirectory() ? "📁 " : "📄 ";
+                String confere = selected.contains(item) ? " ✅" : "";
+
+                setText(icon + archiveName + confere);
             }
         }
     });
+    }
+
 
 
     // classes a parte --------------------------

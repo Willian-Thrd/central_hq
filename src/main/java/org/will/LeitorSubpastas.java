@@ -6,22 +6,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class LeitorSubpastas {
-    ObservableList<File> content = FXCollections.observableArrayList();
-    File dir = new File("HQ_Files");
+    private ObservableList<File> content = FXCollections.observableArrayList();
+    private int nivelInicial = 2;
 
-    public LeitorSubpastas() {
-        Subpastas(dir);
+    public LeitorSubpastas(File dir, int nivel) {
+        this.nivelInicial = nivel;
+        subpastas(dir, 0);
     }
 
-    public void Subpastas (File sub) {
+    private void subpastas (File sub, int nivel) {
         File[] listFile = sub.listFiles();
         if (listFile == null) return;
 
         for (File files : listFile) {
-
             if (files.isDirectory()) {
-                content.add(files);
-                Subpastas(files);
+
+                if (nivel >= nivelInicial) {
+                    content.add(files);
+                }
+                subpastas(files, nivel + 1);
             }
         }
     }
