@@ -24,7 +24,9 @@ public class MainController {
     private Set<File> selected = new HashSet<>();
 
     // Diretório onde estará os HQ's
-    File dir = new File(System.getProperty("user.dir"), "HQ_Files");
+    File targetDir = new File(System.getProperty("user.dir"));
+    File projectFolder = targetDir.getParentFile();
+    File dir = new File(projectFolder, "HQ_Files");
 
     @FXML
     private void initialize() throws IOException {
@@ -36,13 +38,13 @@ public class MainController {
         atualizarLista();
 
         // Adiciona todos os itens (Pastas, subpastas e arquivos) ao iniciar o programa
-        Leitor leitor = new Leitor();
+        Leitor leitor = new Leitor(dir);
         pastas.setItems(leitor.getContent());
 
         pastas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                LeitorSubpastas subpastas = new LeitorSubpastas(newVal, 0);
-                sub.setItems(subpastas.getContent());
+                LeitorSubpastas leitorSubpastas = new LeitorSubpastas(newVal, 0);
+                sub.setItems(leitorSubpastas.getContent());
             }
         });
 
@@ -91,13 +93,13 @@ public class MainController {
         sub.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(File item, boolean empty) {
-            super.updateItem(item, empty); 
+                super.updateItem(item, empty); 
 
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                setText("📁 " + item.getName());
-            }
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("📁 " + item.getName());
+                }
             }
         });
     }
@@ -110,11 +112,17 @@ public class MainController {
     private void cadastrar(ActionEvent event) throws IOException {
         System.out.println("Cadastrando...");
 
-        Leitor leitor = new Leitor();
+        Leitor leitor = new Leitor(dir);
         pastas.setItems(FXCollections.observableArrayList(leitor.getContent()));
+        pastas.refresh();
 
         LeitorSubpastas subpastas = new LeitorSubpastas(dir, 0);
         sub.setItems(subpastas.getContent());
+        sub.refresh(); 
+
+        LeitorArquivos leitorArquivos = new LeitorArquivos(dir);
+        lista.setItems(leitorArquivos.getContent());
+        lista.refresh();
     }
 
     @FXML // Deleta pastas ou arquivos selecionados

@@ -11,10 +11,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class Load {
-    private static final File file = new File("contents/checked.json");
+    private static final File dir = new File(System.getProperty("user.dir"));
+    private static final File contentDir = dir.getParentFile();
+    private static final File file = new File(contentDir, "contents/checked.json");
 
     public static Set<File> load() {
         Set<File> result =  new HashSet<>();
+
+        if (!file.exists()) {
+            return result;
+        }
 
         try (FileReader reader = new FileReader(file)) {
             Gson gson = new Gson();
@@ -22,10 +28,12 @@ public class Load {
 
             Set<String> paths = gson.fromJson(reader, type);
 
-            for (String p : paths) {
-                File f = new File(p);
-                if (f.exists()) {
-                    result.add(f);
+            if (paths != null) {
+                for (String p : paths) {
+                    File f = new File(p);
+                    if (f.exists()) {
+                        result.add(f);
+                    }
                 }
             }
 

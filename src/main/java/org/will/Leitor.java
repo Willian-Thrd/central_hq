@@ -7,14 +7,13 @@ import javafx.collections.ObservableList;
 
 public class Leitor {
     private ObservableList<File> content = FXCollections.observableArrayList();
-    private File dir = new File("HQ_Files");
 
-    public Leitor() {
+    public Leitor(File dir) {
         leitorPastas(dir);
     }
 
     private void leitorPastas (File file) {
-        File[] listFile = dir.listFiles();
+        File[] listFile = file.listFiles();
         if (listFile == null) return;
 
         for (File files : listFile) {
